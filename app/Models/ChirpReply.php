@@ -24,6 +24,8 @@ class ChirpReply extends Model
 
     protected $fillable = [
         'reply',
+        'chirp_id',
+        'user_id'
     ];
 
     protected $dispatchesEvents = [

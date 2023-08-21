@@ -31,6 +31,7 @@ class ChirpReplyController extends Controller
     {
         $validated = $request->validate([
             'message' => 'required|string|max:255',
+            'chirp_id' => 'required|exists:chirps,id',
         ]);
 
         $request->user()->ChirpReply()->create($validated);

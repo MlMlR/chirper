@@ -17,6 +17,7 @@ const form = useForm({
 });
 
 const editing = ref(false);
+const replying = ref(false);
 </script>
 
 <template>
@@ -58,6 +59,17 @@ const editing = ref(false);
                 </div>
             </form>
             <p v-else class="mt-4 text-lg text-gray-900">{{ chirp.message }}</p>
+            <button class="block w-full px-4 py-2 text-left text-xs leading-5 text-gray-700 hover:bg-gray-100 focus:bg-gray-100 transition duration-150 ease-in-out" @click="replying = true">
+                Reply
+            </button>
+            <form v-if="replying" @submit.prevent="form.post(route('chirp-reply.store'), { onSuccess: () => form.reset() })">
+                <textarea class="mt-4 w-full text-gray-900 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"></textarea>
+                <InputError :message="form.errors.message" class="mt-2" />
+                <div class="space-x-2">
+                    <PrimaryButton class="mt-4">Reply</PrimaryButton>
+                    <button class="mt-4" @click="replying = false; form.reset(); form.clearErrors()">Cancel</button>
+                </div>
+            </form>
         </div>
     </div>
 </template>

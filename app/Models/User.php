@@ -23,7 +23,7 @@ class User extends Authenticatable
         return $this->hasMany(ChirpHistory::class);
     }
 
-    public function reply(): HasMany
+    public function chirpReply(): HasMany
     {
         return $this->hasMany(ChirpReply::class);
     }
