@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ChirpController;
+use App\Http\Controllers\ChirpReplyController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +33,10 @@ Route::get('/dashboard', function () {
 
 Route::resource('chirps', ChirpController::class)
     ->only(['index', 'store', 'update', 'destroy'])
+    ->middleware(['auth', 'verified']);
+
+Route::resource('chirp-reply', ChirpReplyController::class)
+    ->only(['store', 'update', 'destroy'])
     ->middleware(['auth', 'verified']);
 
 Route::middleware('auth')->group(function () {

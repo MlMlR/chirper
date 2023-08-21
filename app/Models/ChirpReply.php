@@ -6,10 +6,9 @@ use App\Events\ChirpCreated;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Chirp extends Model
+class ChirpReply extends Model
 {
     use HasFactory, SoftDeletes;
 
@@ -18,18 +17,13 @@ class Chirp extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function history(): HasMany
+    public function chirp(): BelongsTo
     {
-        return $this->hasMany(ChirpHistory::class);
-    }
-
-    public function reply(): HasMany
-    {
-        return $this->hasMany(ChirpReply::class);
+        return $this->belongsTo(Chirp::class);
     }
 
     protected $fillable = [
-        'message',
+        'reply',
     ];
 
     protected $dispatchesEvents = [
