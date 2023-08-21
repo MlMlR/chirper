@@ -72,6 +72,11 @@ class ChirpController extends Controller
             'message' => 'required|string|max:255',
         ]);
 
+        $chirp->history()->create([
+            'message' => $chirp->message,
+            'user_id' => $request->user()->id
+        ]);
+
         $chirp->update($validated);
 
         return redirect(route('chirps.index'));
