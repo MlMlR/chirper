@@ -27,8 +27,5 @@ class ChirpReply extends Model
         'chirp_id',
         'user_id'
     ];
-
-    protected $dispatchesEvents = [
-        'created' => ChirpCreated::class,
-    ];
 }
+

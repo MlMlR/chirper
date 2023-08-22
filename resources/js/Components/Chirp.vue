@@ -14,6 +14,7 @@ const props = defineProps(['chirp']);
 
 const form = useForm({
     message: props.chirp.message,
+    reply: '',
 });
 
 const editing = ref(false);
@@ -63,8 +64,8 @@ const replying = ref(false);
                 Reply
             </button>
             <form v-if="replying" @submit.prevent="form.post(route('chirp-reply.store'), { onSuccess: () => form.reset() })">
-                <textarea class="mt-4 w-full text-gray-900 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"></textarea>
-                <InputError :message="form.errors.message" class="mt-2" />
+                <textarea v-model="form.reply" class="mt-4 w-full text-gray-900 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"></textarea>
+                <InputError :message="form.errors.reply" class="mt-2" />
                 <div class="space-x-2">
                     <PrimaryButton class="mt-4">Reply</PrimaryButton>
                     <button class="mt-4" @click="replying = false; form.reset(); form.clearErrors()">Cancel</button>

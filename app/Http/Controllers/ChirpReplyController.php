@@ -30,7 +30,7 @@ class ChirpReplyController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'message' => 'required|string|max:255',
+            'reply' => 'required|string|max:255',
             'chirp_id' => 'required|exists:chirps,id',
         ]);
 
