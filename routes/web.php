@@ -31,12 +31,16 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('/snake', function () {
+    return Inertia::render('Snake');
+});
+
 Route::resource('chirps', ChirpController::class)
     ->only(['index', 'store', 'update', 'destroy'])
     ->middleware(['auth', 'verified']);
 
 Route::resource('chirp-reply', ChirpReplyController::class)
-    ->only(['store', 'update', 'destroy'])
+    ->only(['store'])
     ->middleware(['auth', 'verified']);
 
 Route::middleware('auth')->group(function () {
