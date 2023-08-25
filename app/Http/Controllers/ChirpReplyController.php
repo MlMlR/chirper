@@ -24,6 +24,13 @@ class ChirpReplyController extends Controller
         //
     }
 
+    public function getReplies(int $chirpId) {
+
+        return ChirpReply::where('chirp_id', $chirpId)
+            ->with('user')
+            ->get();
+    }
+
     /**
      * Store a newly created resource in storage.
      */

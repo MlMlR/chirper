@@ -23,7 +23,7 @@ class Chirp extends Model
         return $this->hasMany(ChirpHistory::class);
     }
 
-    public function reply(): HasMany
+    public function replies(): HasMany
     {
         return $this->hasMany(ChirpReply::class);
     }

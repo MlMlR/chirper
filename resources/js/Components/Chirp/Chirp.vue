@@ -6,16 +6,22 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { useForm } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import {ref, onMounted, computed} from 'vue';
+import ChirpReply from './ChirpReply.vue';
 
 dayjs.extend(relativeTime);
 
-const props = defineProps(['chirp']);
-
+const props = defineProps(['chirp','chirpReplies']);
 const form = useForm({
     message: props.chirp.message,
     reply: '',
+    chirp_id: props.chirp.id,
 });
+
+const chirpReplies = computed(async () => {
+    const response = await fetch(`/chirp-reply/${props.chirp.id}/replies`)
+    return await response.json()
+})
 
 const editing = ref(false);
 const replying = ref(false);
@@ -51,7 +57,9 @@ const replying = ref(false);
                     </template>
                 </Dropdown>
             </div>
-            <form v-if="editing" @submit.prevent="form.put(route('chirps.update', chirp.id), { onSuccess: () => editing = false })">
+            <form v-if="editing" @submit.prevent="form.put(
+                route('chirps.update', chirp.id),
+                 {onSuccess: () => editing = false })">
                 <textarea v-model="form.message" class="mt-4 w-full text-gray-900 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"></textarea>
                 <InputError :message="form.errors.message" class="mt-2" />
                 <div class="space-x-2">
@@ -60,10 +68,12 @@ const replying = ref(false);
                 </div>
             </form>
             <p v-else class="mt-4 text-lg text-gray-900">{{ chirp.message }}</p>
-            <button class="block w-full px-4 py-2 text-left text-xs leading-5 text-gray-700 hover:bg-gray-100 focus:bg-gray-100 transition duration-150 ease-in-out" @click="replying = true">
+            <button class=" px-4 py-2 text-left text-xs leading-5 text-gray-700 hover:bg-gray-100 focus:bg-gray-100 transition duration-150 ease-in-out" @click="replying = !replying">
                 Reply
             </button>
-            <form v-if="replying" @submit.prevent="form.post(route('chirp-reply.store'), { onSuccess: () => form.reset() })">
+            <form v-if="replying" @submit.prevent="form.post(
+                route('chirp-reply.store'),
+                 {onSuccess: () => {form.reset(); replying = false} })">
                 <textarea v-model="form.reply" class="mt-4 w-full text-gray-900 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"></textarea>
                 <InputError :message="form.errors.reply" class="mt-2" />
                 <div class="space-x-2">
@@ -71,6 +81,14 @@ const replying = ref(false);
                     <button class="mt-4" @click="replying = false; form.reset(); form.clearErrors()">Cancel</button>
                 </div>
             </form>
+        </div>
+        <div>
+            <ChirpReply
+                v-if="chirp.reply"
+                v-for="chirpReplie in chirpReplies"
+                :key="chirpReplie.id"
+                :chirpReplie="chirpReplie"
+            />
         </div>
     </div>
 </template>

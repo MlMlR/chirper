@@ -40,8 +40,11 @@ Route::resource('chirps', ChirpController::class)
     ->middleware(['auth', 'verified']);
 
 Route::resource('chirp-reply', ChirpReplyController::class)
-    ->only(['store'])
-    ->middleware(['auth', 'verified']);
+    ->only(['store', 'index', 'replies'])
+    ->middleware(['auth']);
+
+Route::get('/chirp-reply/{chirpId}/replies', [ChirpReplyController::class, 'getReplies']);
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
